@@ -1,0 +1,26 @@
+.jumbotron {
+    padding: 2rem 1rem;
+    margin-bottom: 2rem;
+    background-color: #e9ecef;
+    border-radius: .3rem;
+}
+footer {
+    position: absolute;
+    text-decoration: none;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
+
+#employees_list {
+    align-items: flex-end;
+}
+
+.no-style-link {
+    text-decoration: none;
+    color: gray;
+}
+
+#cover {
+    width: 500px;
+}

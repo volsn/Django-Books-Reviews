@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block main %}
+    <main>
+        <div class="album py-5 bg-light">
+            <div class="container">
+                {% if books %}
+                    <div id="employees_list" class="row row-cols-4 g-3">
+                        {% for book in books %}
+                            <div class="col">
+                                <div class="card shadow-sm">
+                                    <img src="{{ book.cover_img.url|default:'book_covers/default.png' }}" class="card-img-top" alt="...">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><a href="{% url 'book:book-details' pk=book.pk %}">{{ book.title }}</a></h5>
+                                        <h6 class="card-subtitle mb-2 text-muted">by
+                                            {% for author in book.authors.all %}
+                                                <a href="{% url 'book:index' %}?author={{ author }}" class="no-style-link">{{ author }}</a>
+                                            {% endfor %}
+                                        </h6>
+                                        <h6 class="card-subtitle mb-2 text-muted">Published
+                                            {{ book.pub_year }}</h6>
+                                        <h6 class="card-subtitle mb-2 text-muted">Rating {{ book.rating }}</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {% block pagination %}
+                        {% with '?title='|add:title|add:'&author='|add:author as base_url %}
+                            {% include 'pagination.html' %}
+                        {% endwith %}
+                    {% endblock %}
+
+                {% else %}
+                    <div class="jumbotron">
+                        <h3>No matching Books found :(</h3>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+{% endblock %}

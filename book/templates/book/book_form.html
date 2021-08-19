@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block main %}
+    <div class="jumbotron" style="width: 70%; margin: 50px auto;">
+        <form action="{% url 'book:book-update' pk=book.pk %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-primary" type="submit">Update</button>
+        </form>
+    </div>
+{% endblock %}

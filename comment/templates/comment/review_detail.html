@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load comment_extras %}
+{% load user_extras %}
+
+{% block main %}
+    <div id="review" class="jumbotron" style="width: 70%; margin: 50px auto;">
+        <h2>{{ review.title }}</h2>
+        <h5>written by {{ review.reviewer }}</h5>
+        <h5>Book "{{ review.book }}" rated {{ review.rating }}</h5>
+
+        <p>{{ review.text|safe }}</p>
+
+        {% if current_user_is_moderator %}
+            <div>
+                <br>
+                <h5>Moderator Buttons</h5>
+                <a class="btn btn-secondary edit-button" href="{% url 'comment:review-update' pk=review.pk %}">Edit</a>
+                <button class="btn btn-danger delete-button" data-bs-toggle="modal" data-bs-target="#deleteReviewModal">Delete</button>
+
+            </div>
+        {% endif %}
+    </div>
+
+    <div id="comments">
+
+        <section id="comments">
+<div class="container my-5 py-5">
+<div class="row d-flex" style="justify-content: space-around">
+  <div class="col-md-12 col-lg-10 col-xl-8">
+    <div class="card">
+      <div class="card-body p-4">
+        <h4 class="text-center mb-4 pb-2">Comments</h4>
+
+        <div class="row">
+          <div class="col">
+
+            {% with request.user.pk as current_user_pk %}
+                {% for comment in comments|first_child %}
+                    {% include "comment/comment_branch.html" with comments=comments %}
+                {% endfor %}
+            {% endwith %}
+          
+          </div>
+        </div>
+
+        {% if request.user.is_authenticated %}
+            <div class="container m-4">
+                <a href="{% url 'comment:comment-add' reply_to=None pk=review.pk  %}" class="btn btn-primary">Add Comment</a>
+            </div>
+        {% endif %}
+      
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</section>
+    </div>
+    
+        {% block modals %}
+            <div class="modal fade" id="deleteReviewModal" tabindex="-1" role="dialog">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Delete Review?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    Are you sure you want to delete this review and everything associated with it?
+                  </div>
+                  <div class="modal-footer">
+                      <form action="{% url 'comment:review-delete' pk=review.pk %}" method="POST">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-danger">Delete</button>
+                      </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+        {% endblock %}
+
+{% endblock %}

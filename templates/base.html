@@ -1,0 +1,88 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="Mykola Volosnikov">
+        <title>
+            {% block title %}
+                Books
+            {% endblock %}
+        </title>
+        <!-- Bootstrap core CSS -->
+        <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}">
+        <link rel="stylesheet" href="{% static 'css/base.css' %}">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
+    </head>
+    <body>
+
+        {% block navbar %}
+            <header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark p-3">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'book:index' %}">Books</a>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+        </li>
+      </ul>
+
+
+      <form class="d-flex">
+
+          <div class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown">
+            <i class="bi bi-person-fill text-white"></i>
+          </a>
+          <ul class="dropdown-menu">
+              {% if request.user.is_authenticated %}
+                <li><a class="dropdown-item" href="{% url 'user:user_logout' %}">Logout</a></li>
+              {% else %}
+                <li><a class="dropdown-item" href="{% url 'user:user_login' %}">Login</a></li>
+                <li><a class="dropdown-item" href="{% url 'user:user_register' %}">Register</a></li>
+              {% endif %}
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="{% url 'admin:index' %}" target="_blank">Admin Site</a></li>
+          </ul>
+        </div>
+
+          <div class="input-group">
+              <input id="search-field" type="text" class="form-control" placeholder="Search by">
+              <div id="search-by-title" class="btn btn-outline-light">Title</div>
+              <div id="search-by-author" class="btn btn-outline-light">Writer</div>
+            </div>
+      </form>
+    </div>
+  </div>
+</nav>
+    </header>
+        {% endblock %}
+
+        {% block main %}
+        {% endblock %}
+
+        <!--
+        <footer class="text-muted py-5">
+            <div class="container">
+                <p class="float-end mb-1">
+                    <a href="#"><i class="bi bi-arrow-up-square-fill"></i> Back to top</a>
+                </p>
+            </div>
+        </footer>
+        -->
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="{% static 'bootstrap/js/bootstrap.bundle.js' %}"></script>
+        <script>
+            $('#search-by-title').click(() => {
+                window.location.href = '?title=' + $('#search-field').val();
+            })
+            $('#search-by-author').click(() => {
+                window.location.href = '?author=' + $('#search-field').val();
+            })
+        </script>
+    </body>
+</html>
