@@ -1,12 +1,10 @@
+from django.urls import reverse
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponseRedirect
-from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import PermissionDenied
+from django.http import HttpResponseRedirect, HttpResponseForbidden
 
 from user.forms import UserForm, UserProfileInfoForm
-# Create your views here.
 
 
 def user_login(request):
@@ -25,10 +23,10 @@ def user_login(request):
                 login(request, user)
                 return HttpResponseRedirect(reverse('book:index'))
             else:
-                raise PermissionDenied()
+                return HttpResponseForbidden('Login Failed')
 
         else:
-            return PermissionDenied()
+            return HttpResponseForbidden('Login Failed')
     else:
         return render(request, 'user/login.html', context={})
 

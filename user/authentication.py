@@ -24,9 +24,9 @@ class MyCustomAuthBackend(BaseBackend):
             user = User.objects.get(username=username)
             if user.check_password(password):
                 return user
-
         except User.DoesNotExist:
             pass
+
         return None
 
     def get_user(self, user_id: int) -> Union[User, None]:

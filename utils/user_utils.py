@@ -11,7 +11,7 @@ class ModeratorRequiredMixin:
         if request.user.is_superuser \
                 or request.user.groups.filter(name='moderator').exists():
             return super().dispatch(request, *args, **kwargs)
-        return HttpResponseForbidden()
+        return HttpResponseForbidden('Moderator Rights required')
 
 
 class OwnerOrModeratorRequiredMixin:
@@ -20,11 +20,11 @@ class OwnerOrModeratorRequiredMixin:
                 or request.user.is_superuser
                 or self.object.owner.pk == request.user.pk):
             return super().dispatch(request, *args, **kwargs)
-        return HttpResponseForbidden()
+        return HttpResponseForbidden('Moderator or Owner Rights required')
 
 
 class LoginRequiredMixin:
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             return super().dispatch(request, *args, **kwargs)
-        return HttpResponseForbidden()
+        return HttpResponseForbidden('Login Required')
