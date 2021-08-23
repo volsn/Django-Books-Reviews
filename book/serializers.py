@@ -3,9 +3,16 @@ from book.models import Book
 
 
 class BookSerializer(serializers.ModelSerializer):
+    """
+    Serializer for Book Model
+    """
     authors = serializers.SerializerMethodField()
 
     def get_authors(self, instance):
+        """
+        Function used instead of Author List Serializer,
+        that can't be used due to circular import
+        """
         authors = instance.authors.get_queryset()
         return [{'id': author.pk, 'name': author.name}
                 for author in authors]
