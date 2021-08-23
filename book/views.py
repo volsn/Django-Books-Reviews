@@ -1,8 +1,9 @@
 """
 Views for Book App
 """
-from django.db.models import QuerySet
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
+from django.db.models import QuerySet
 from django.views.generic import (ListView, DetailView,
                                   DeleteView, UpdateView)
 
@@ -11,6 +12,14 @@ from book.forms import BookForm
 from comment.models import Review
 from utils.user_utils import (ModeratorRequiredMixin,
                               current_user_is_moderator)
+
+
+def index(request):
+    """
+    Redirect User from / to /book,
+    which is app index page
+    """
+    return redirect(reverse_lazy('book:index'))
 
 
 class BooksListView(ListView):
