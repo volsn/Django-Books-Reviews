@@ -64,18 +64,7 @@
         {% block main %}
         {% endblock %}
 
-        <!--
-        <footer class="text-muted py-5">
-            <div class="container">
-                <p class="float-end mb-1">
-                    <a href="#"><i class="bi bi-arrow-up-square-fill"></i> Back to top</a>
-                </p>
-            </div>
-        </footer>
-        -->
-
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="{% static 'bootstrap/js/bootstrap.bundle.js' %}"></script>
         <script>
             $('#search-by-title').click(() => {
                 window.location.href = '?title=' + $('#search-field').val();

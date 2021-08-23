@@ -1,90 +1,82 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% block main %}
 
-{% block main %}
-
-    <main>
-        <div class="album py-5">
-            <div class="container">
-                <div class="jumbotron">
-                    <img id="cover" class="p-4" src="{{ book.cover_img.url|default:'book_covers/default.png' }}" alt="">
-                    <h3 id="name">{{ book.title }}</h3>
-                    <h5 id="author">by
-                        {% for author in book.authors.prefetch_related %}
-                            <a href="{% url 'book:index' %}?author={{ author }}" style="text-decoration: none; color: gray">{{ author }}</a>
-                        {% endfor %}
-                    </h5>
-                    <h5 id="pub_year">Published {{ book.publication_year }}</h5>
-                    <h5 id="rating">Rating {{ book.rating }}</h5>
-                    <div id="description">
-                        {{ book.description|safe }}
-                    </div>
-                    <br>
-                    <!-- Control Buttons -->
-                    {% if current_user_is_moderator  %}
-                        <h5>Moderator Buttons</h5>
-                        <a class="btn btn-secondary edit-button" href="{% url 'book:book-update' pk=book.pk %}">Edit</a>
-                        <button class="btn btn-danger delete-button" data-bs-toggle="modal" data-bs-target="#deleteBookModal">Delete</button>
-                    {% endif %}
+<main>
+    <div class="album py-5">
+        <div class="container">
+            <div class="jumbotron">
+                <img id="cover" class="p-4" src="{{ book.cover_img.url|default:'book_covers/default.png' }}" alt="" />
+                <h3 id="name">{{ book.title }}</h3>
+                <h5 id="author">
+                    by {% for author in book.authors.prefetch_related %}
+                    <a href="{% url 'book:index' %}?author={{ author }}" style="text-decoration: none; color: gray;">{{ author }}</a>
+                    {% endfor %}
+                </h5>
+                <h5 id="pub_year">Published {{ book.publication_year }}</h5>
+                <h5 id="rating">Rating {{ book.rating }}</h5>
+                <div id="description">
+                    {{ book.description|safe }}
                 </div>
+                <br />
+                <!-- Control Buttons -->
+                {% if current_user_is_moderator %}
+                <h5>Moderator Buttons</h5>
+                <a class="btn btn-secondary edit-button" href="{% url 'book:book-update' pk=book.pk %}">Edit</a>
+                <button class="btn btn-danger delete-button" data-bs-toggle="modal" data-bs-target="#deleteBookModal">Delete</button>
+                {% endif %}
             </div>
         </div>
-    
-        <div id="reviews" class="container">
-            <h3>Reviews</h3>
-            
-            {% if not reviews %}
-                <p>No Reviews yet.</p>
-            {% else %}
-                <div class="row row-cols-3 g-3">
+    </div>
 
-                    {% for review in reviews %}
-                        <div class="col">
-                            <div class="card shadow-sm">
-                                <div class="card-body">
-                                    <h5 class="card-title"><a href="{% url 'comment:review-details' pk=review.pk %}">{{ review.title }}</a></h5>
-                                    <p>
-                                        {{ review.intro|safe }}
-                                    </p>
-                                    <h6 class="card-subtitle mb-2 text-muted">by {{ review.reviewer }}</h6>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
+    <div id="reviews" class="container">
+        <h3>Reviews</h3>
 
+        {% if not reviews %}
+        <p>No Reviews yet.</p>
+        {% else %}
+        <div class="row row-cols-3 g-3">
+            {% for review in reviews %}
+            <div class="col">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title"><a href="{% url 'comment:review-details' pk=review.pk %}">{{ review.title }}</a></h5>
+                        <p>
+                            {{ review.intro|safe }}
+                        </p>
+                        <h6 class="card-subtitle mb-2 text-muted">by {{ review.reviewer }}</h6>
+                    </div>
                 </div>
-            {% endif %} 
-        
-            {% if request.user.is_authenticated %}
-                <div class="m-4">
-                    <a href="{% url 'comment:review-add' pk=book.pk %}" class="btn btn-primary">Add Review</a>
-                </div>
-            {% endif %} 
-            
+            </div>
+            {% endfor %}
         </div>
+        {% endif %} {% if request.user.is_authenticated %}
+        <div class="m-4">
+            <a href="{% url 'comment:review-add' pk=book.pk %}" class="btn btn-primary">Add Review</a>
+        </div>
+        {% endif %}
+    </div>
 
-        {% block modals %}
-            <div class="modal fade" id="deleteBookModal" tabindex="-1" role="dialog">
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
+    {% block modals %}
+    <div class="modal fade" id="deleteBookModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Delete Book?</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
+                        <span aria-hidden="true">&times;</span>
                     </button>
-                  </div>
-                  <div class="modal-body">
-                    Are you sure you want to delete this book and everything associated with it?
-                  </div>
-                  <div class="modal-footer">
-                      <form action="{% url 'book:book-delete' pk=book.pk %}" method="POST">
-                          {% csrf_token %}
-                          <button type="submit" class="btn btn-danger">Delete</button>
-                      </form>
-                  </div>
                 </div>
-              </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this book and everything associated with it?
+                </div>
+                <div class="modal-footer">
+                    <form action="{% url 'book:book-delete' pk=book.pk %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
             </div>
-        {% endblock %}
-
-    </main>
+        </div>
+    </div>
+    {% endblock %}
+</main>
 {% endblock %}

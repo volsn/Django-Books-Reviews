@@ -6,11 +6,11 @@ from django.http import HttpResponseRedirect
 from comment.models import Review, Comment
 from comment.forms import ReviewForm, CommentForm
 
-from utils.user_utils import OwnerOrModeratorRequiredMixin, current_user_is_moderator
-# Create your views here.
+from utils.user_utils import (OwnerOrModeratorRequiredMixin, LoginRequiredMixin,
+                              current_user_is_moderator)
 
 
-class ReviewCreateView(CreateView):
+class ReviewCreateView(LoginRequiredMixin, CreateView):
     """
     Create Review
     """
@@ -108,7 +108,7 @@ class ReviewDeleteView(OwnerOrModeratorRequiredMixin, DeleteView):
         return reverse_lazy('book:book-details', kwargs={'pk': self.object.book_id})
 
 
-class CommentCreateView(CreateView):
+class CommentCreateView(LoginRequiredMixin, CreateView):
     """
     Comment Create
     """
