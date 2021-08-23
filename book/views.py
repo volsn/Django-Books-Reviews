@@ -9,9 +9,8 @@ from django.views.generic import (ListView, DetailView,
 from book.models import Book
 from book.forms import BookForm
 from comment.models import Review
-from utils.user_utils import ModeratorRequiredMixin
-
-# Create your views here.
+from utils.user_utils import (ModeratorRequiredMixin,
+                              current_user_is_moderator)
 
 
 class BooksListView(ListView):
@@ -74,6 +73,7 @@ class BookDetailView(DetailView):
         context['reviews'], context['page_obj'] = Review.get_book_reviews(pk=self.object.pk,
                                                                           page=page,
                                                                           paginate_by=self.paginate_by)
+        context['current_user_is_moderator'] = current_user_is_moderator(self.request)
         return context
 
 

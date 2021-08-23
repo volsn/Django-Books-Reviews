@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-{% load user_extras %}
 
 {% block main %}
 
@@ -21,7 +20,7 @@
                     </div>
                     <br>
                     <!-- Control Buttons -->
-                    {% if request.user|is_moderator  %}
+                    {% if current_user_is_moderator  %}
                         <h5>Moderator Buttons</h5>
                         <a class="btn btn-secondary edit-button" href="{% url 'book:book-update' pk=book.pk %}">Edit</a>
                         <button class="btn btn-danger delete-button" data-bs-toggle="modal" data-bs-target="#deleteBookModal">Delete</button>

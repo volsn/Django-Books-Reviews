@@ -38,14 +38,17 @@ INTERNAL_IPS = [
     '127.0.0.1'
 ]
 
-# Login Redirect url
-LOGIN_REDIRECT_URL = '/user/user_login'
 
+# Application definition
 
 AUTHENTICATION_BACKENDS = ['user.authentication.MyCustomAuthBackend']
 
+LOGIN_REDIRECT_URL = '/user/user_login'
 
-# Application definition
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -56,6 +59,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'debug_toolbar',
+    'rest_framework',
     'book.apps.BookConfig',
     'user.apps.UserConfig',
     'author.apps.AuthorConfig',

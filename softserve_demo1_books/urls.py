@@ -24,6 +24,9 @@ urlpatterns = [
     path('book/', include(('book.urls', 'book'), namespace='book')),
     path('accounts/', include(('user.urls', 'user'), namespace='user')),
     path('comment/', include(('comment.urls', 'comment'), namespace='comment')),
+    path('api/author/', include('author.urls')),
+    path('api/book/', include('book.api')),
+    path('api-login/', include('rest_framework.urls')),
     path('__debug__/', include(debug_toolbar.urls)),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

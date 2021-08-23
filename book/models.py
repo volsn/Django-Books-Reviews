@@ -13,10 +13,13 @@ class Book(models.Model):
     title = models.CharField(max_length=256)
     rating = models.FloatField()
     publication_year = models.IntegerField(default=date.today().year)
-    cover_img = models.ImageField(upload_to='book_covers', default='book_covers/default.png')
+    cover_img = models.ImageField(upload_to='book_covers',
+                                  default='book_covers/default.png')
     description = models.TextField()
 
-    authors = models.ManyToManyField('author.Author', blank=True)
+    authors = models.ManyToManyField('author.Author',
+                                     blank=True,
+                                     related_name='books')
 
     class Meta:
         ordering = ['-rating']  # Sort Books by their descending rating
