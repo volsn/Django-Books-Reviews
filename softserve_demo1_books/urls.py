@@ -20,6 +20,7 @@ from django.conf import settings
 import debug_toolbar
 
 from book.views import index
+from user.api import GetToken, RetrieveUser
 
 
 urlpatterns = [
@@ -29,6 +30,8 @@ urlpatterns = [
     path('comment/', include(('comment.urls', 'comment'), namespace='comment')),
     path('api/author/', include('author.urls')),
     path('api/book/', include('book.api')),
+    path('api/user/<int:pk>', RetrieveUser.as_view()),
+    path('api/login/', GetToken.as_view()),
     path('api-login/', include('rest_framework.urls')),
     path('admin/', admin.site.urls, name='admin'),
     path('__debug__/', include(debug_toolbar.urls)),
