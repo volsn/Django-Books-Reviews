@@ -13,29 +13,31 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+import debug_toolbar
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from django.conf.urls.static import static
-from django.conf import settings
-import debug_toolbar
 
 from book.views import index
 from user.api import GetToken, RetrieveUser
 
-
 urlpatterns = [
-    path('', index),
-    path('book/', include(('book.urls', 'book'), namespace='book')),
-    path('accounts/', include(('user.urls', 'user'), namespace='user')),
-    path('comment/', include(('comment.urls', 'comment'), namespace='comment')),
-    path('api/author/', include('author.urls')),
-    path('api/book/', include('book.api')),
-    path('api/user/<int:pk>', RetrieveUser.as_view()),
-    path('api/login/', GetToken.as_view()),
-    path('api-login/', include('rest_framework.urls')),
-    path('admin/', admin.site.urls, name='admin'),
-    path('__debug__/', include(debug_toolbar.urls)),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+                  path('', index),
+                  path('book/',
+                       include(('book.urls', 'book'), namespace='book')),
+                  path('accounts/',
+                       include(('user.urls', 'user'), namespace='user')),
+                  path('comment/', include(('comment.urls', 'comment'),
+                                           namespace='comment')),
+                  path('api/author/', include('author.urls')),
+                  path('api/book/', include('book.api')),
+                  path('api/user/<int:pk>', RetrieveUser.as_view()),
+                  path('api/login/', GetToken.as_view()),
+                  path('api-login/', include('rest_framework.urls')),
+                  path('admin/', admin.site.urls, name='admin'),
+                  path('__debug__/', include(debug_toolbar.urls)),
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 handler403 = 'error_handlers.views.handler403'
 handler404 = 'error_handlers.views.handler404'

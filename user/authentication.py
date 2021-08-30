@@ -9,7 +9,9 @@ class MyCustomAuthBackend(BaseBackend):
     """
     Custom Authentication Backend
     """
-    def authenticate(self, request: HttpRequest, username: str = None, password: str = None) -> Union[User, None]:
+
+    def authenticate(self, request: HttpRequest, username: str = None,
+                     password: str = None) -> Union[User, None]:
         """
         Overriding authenticate method.
         Return User object when correct username and password provided,

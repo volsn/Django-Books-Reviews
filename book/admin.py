@@ -2,9 +2,8 @@
 Registering Models for Django Admin Panel
 """
 from django.contrib import admin
-from book.models import Book
 
-# Register your models here.
+from book.models import Book
 
 
 class BookModel(admin.ModelAdmin):

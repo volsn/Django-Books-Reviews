@@ -5,9 +5,11 @@ import random
 import pandas as pd
 from faker import Faker
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'softserve_demo1_books.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE',
+                      'softserve_demo1_books.settings')
 
 import django
+
 django.setup()
 
 from django.db.utils import IntegrityError
@@ -17,7 +19,6 @@ from author.models import Author
 from book.models import Book
 from user.models import User
 from comment.models import Review, Comment
-
 
 fake = Faker()
 

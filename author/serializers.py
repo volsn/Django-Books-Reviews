@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from author.models import Author
 from book.serializers import BookSerializer
 
@@ -7,6 +8,7 @@ class AuthorListSerializer(serializers.ModelSerializer):
     """
     Serializer for a List of Authors
     """
+
     class Meta:
         model = Author
         fields = ('id', 'name',)

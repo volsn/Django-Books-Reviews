@@ -1,8 +1,6 @@
-from django.db import models
-
 from datetime import date
 
-# Create your models here.
+from django.db import models
 from django.db.models import QuerySet
 
 
@@ -34,7 +32,8 @@ class Book(models.Model):
         :param title: str
         :return: QuerySet
         """
-        return cls.objects.filter(title__icontains=title).prefetch_related('authors')
+        return cls.objects.filter(title__icontains=title).prefetch_related(
+            'authors')
 
     @classmethod
     def find_by_author(cls, name: str) -> QuerySet:
@@ -43,4 +42,5 @@ class Book(models.Model):
         :param name: str
         :return: QuerySet
         """
-        return cls.objects.filter(authors__name__contains=name).prefetch_related('authors')
+        return cls.objects.filter(
+            authors__name__contains=name).prefetch_related('authors')

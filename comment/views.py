@@ -1,13 +1,12 @@
+from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import (CreateView, DetailView,
                                   UpdateView, DeleteView)
-from django.http import HttpResponseRedirect
 
-from comment.models import Review, Comment
 from comment.forms import ReviewForm, CommentForm
-
-from utils.user_utils import (OwnerOrModeratorRequiredMixin, LoginRequiredMixin,
-                              current_user_is_moderator)
+from comment.models import Review, Comment
+from utils.user_utils import (OwnerOrModeratorRequiredMixin,
+                              LoginRequiredMixin, current_user_is_moderator)
 
 
 class ReviewCreateView(LoginRequiredMixin, CreateView):
@@ -21,10 +20,14 @@ class ReviewCreateView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         """
         Insert submit url and submit button text into template context.
-        Needed because we use the same template for updating and creating reviews.
+        Needed because we use the same template for
+        updating and creating reviews.
         """
         context = super().get_context_data(**kwargs)
-        context['submit_url'] = reverse_lazy('comment:review-add', kwargs={'pk': self.kwargs.get('pk')})
+        context['submit_url'] = reverse_lazy('comment:review-add',
+                                             kwargs={
+                                                 'pk': self.kwargs.get('pk')
+                                             })
         context['submit_text'] = 'Add Review'
         return context
 
@@ -39,7 +42,9 @@ class ReviewCreateView(LoginRequiredMixin, CreateView):
         review.reviewer_id = self.request.user.pk
         review.save()
         return HttpResponseRedirect(reverse('book:book-details',
-                                            kwargs={'pk': self.kwargs.get('pk')}))
+                                            kwargs={
+                                                'pk': self.kwargs.get('pk')
+                                            }))
 
 
 class ReviewDetailView(DetailView):
@@ -63,10 +68,13 @@ class ReviewDetailView(DetailView):
         """
         context = super().get_context_data(**kwargs)
         page = self.request.GET.get('page') or 1
-        context['comments'], context['page_obj'] = Comment.get_review_comments(pk=self.object.pk,
-                                                                               page=page,
-                                                                               paginate_by=self.paginate_by)
-        context['current_user_is_moderator'] = current_user_is_moderator(self.request)
+        context['comments'], context['page_obj'] = Comment.get_review_comments(
+            pk=self.object.pk,
+            page=page,
+            paginate_by=self.paginate_by
+        )
+        context['current_user_is_moderator'] = \
+            current_user_is_moderator(self.request)
         return context
 
 
@@ -81,10 +89,14 @@ class ReviewUpdateView(OwnerOrModeratorRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         """
         Insert submit url and submit button text into template context.
-        Needed because we use the same template for updating and creating reviews.
+        Needed because we use the same template
+        for updating and creating reviews.
         """
         context = super().get_context_data(**kwargs)
-        context['submit_url'] = reverse_lazy('comment:review-update', kwargs={'pk': self.kwargs.get('pk')})
+        context['submit_url'] = reverse_lazy('comment:review-update',
+                                             kwargs={
+                                                 'pk': self.kwargs.get('pk')
+                                             })
         context['submit_text'] = 'Update Review'
         return context
 
@@ -92,7 +104,9 @@ class ReviewUpdateView(OwnerOrModeratorRequiredMixin, UpdateView):
         """
         Return User to Review Details page
         """
-        return reverse_lazy('comment:review-details', kwargs={'pk': self.kwargs.get('pk')})
+        return reverse_lazy('comment:review-details', kwargs={
+            'pk': self.kwargs.get('pk')
+        })
 
 
 class ReviewDeleteView(OwnerOrModeratorRequiredMixin, DeleteView):
@@ -105,7 +119,9 @@ class ReviewDeleteView(OwnerOrModeratorRequiredMixin, DeleteView):
         """
         Return User to Book Details Page
         """
-        return reverse_lazy('book:book-details', kwargs={'pk': self.object.book_id})
+        return reverse_lazy('book:book-details', kwargs={
+            'pk': self.object.book_id
+        })
 
 
 class CommentCreateView(LoginRequiredMixin, CreateView):
@@ -119,7 +135,8 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         """
         Insert submit url and submit button text into template context.
-        Needed because we use the same template for updating and creating comments.
+        Needed because we use the same template
+        for updating and creating comments.
         """
         context = super().get_context_data(**kwargs)
         context['submit_url'] = reverse_lazy('comment:comment-add', kwargs={
@@ -140,7 +157,9 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
             comment.replied_to_id = self.kwargs.get('reply_to')
         comment.save()
         return HttpResponseRedirect(reverse('comment:review-details',
-                                            kwargs={'pk': self.kwargs.get('pk')}))
+                                            kwargs={
+                                                'pk': self.kwargs.get('pk')
+                                            }))
 
 
 class CommentUpdateView(OwnerOrModeratorRequiredMixin, UpdateView):
@@ -154,10 +173,13 @@ class CommentUpdateView(OwnerOrModeratorRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         """
         Insert submit url and submit button text into template context.
-        Needed because we use the same template for updating and creating comments.
+        Needed because we use the same template
+        for updating and creating comments.
         """
         context = super().get_context_data(**kwargs)
-        context['submit_url'] = reverse_lazy('comment:comment-update', kwargs={'pk': self.kwargs.get('pk')})
+        context['submit_url'] = reverse_lazy('comment:comment-update', kwargs={
+            'pk': self.kwargs.get('pk')
+        })
         context['submit_text'] = 'Update Comment'
         return context
 
@@ -165,7 +187,9 @@ class CommentUpdateView(OwnerOrModeratorRequiredMixin, UpdateView):
         """
         Return User to Review Details Page
         """
-        return reverse_lazy('comment:review-details', kwargs={'pk': self.object.review_id})
+        return reverse_lazy('comment:review-details', kwargs={
+            'pk': self.object.review_id
+        })
 
 
 class CommentDeleteView(OwnerOrModeratorRequiredMixin, DeleteView):
@@ -179,4 +203,6 @@ class CommentDeleteView(OwnerOrModeratorRequiredMixin, DeleteView):
         """
         Return User to Review Details Page
         """
-        return reverse_lazy('comment:review-details', kwargs={'pk': self.object.review_id})
+        return reverse_lazy('comment:review-details', kwargs={
+            'pk': self.object.review_id
+        })

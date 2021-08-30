@@ -1,6 +1,6 @@
-import jwt
 from datetime import datetime, timedelta
 
+import jwt
 from django.conf import settings
 from django.contrib.auth.models import User
 from rest_framework import views
@@ -18,7 +18,7 @@ class GetToken(views.APIView):
 
         token = jwt.encode({
             'id': user.pk,
-            'admin': user.is_superuser,
+            'is_admin': user.is_superuser,
             'exp': int(dt.strftime('%s')),
         }, settings.SECRET_KEY, algorithm='HS256')
 

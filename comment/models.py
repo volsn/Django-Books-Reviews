@@ -1,9 +1,10 @@
 from typing import Tuple
 
-from django.db import models
-from django.db.models import QuerySet
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
+from django.db import models
+from django.db.models import QuerySet
+
 
 # Create your models here.
 
@@ -59,12 +60,14 @@ class Review(models.Model):
         """
         All comments written by superuser or moderator are approved by default
         """
-        if self.reviewer.is_superuser or self.reviewer.groups.filter(name='moderator').exists():
+        if self.reviewer.is_superuser or self.reviewer.groups.filter(
+                name='moderator').exists():
             self.approved = True
         super().save(*args, **kwargs)
 
     @classmethod
-    def get_book_reviews(cls, *, pk: int, page: int = 0, paginate_by: int = 12) -> Tuple[QuerySet, Paginator]:
+    def get_book_reviews(cls, *, pk: int, page: int = 0,
+                         paginate_by: int = 12) -> Tuple[QuerySet, Paginator]:
         """
         Return Book Reviews and Pagination object.
         Used in Book Details view.
@@ -73,7 +76,10 @@ class Review(models.Model):
         :param paginate_by: int = 12
         :return: Tuple[QuerySet, Paginator]
         """
-        pag = Paginator(cls.objects.select_related('reviewer').filter(approved=True, book__pk=pk), paginate_by)
+        pag = Paginator(
+            cls.objects.select_related('reviewer').filter(approved=True,
+                                                          book__pk=pk),
+            paginate_by)
         return pag.page(page).object_list, pag
 
 
@@ -116,12 +122,15 @@ class Comment(models.Model):
         """
         All comments written by superuser or moderator are approved by default
         """
-        if self.writer.is_superuser or self.writer.groups.filter(name='moderator').exists():
+        if self.writer.is_superuser or self.writer.groups.filter(
+                name='moderator').exists():
             self.approved = True
         super().save(*args, **kwargs)
 
     @classmethod
-    def get_review_comments(cls, *, pk: int, page: int = 0, paginate_by: int = 12) -> Tuple[QuerySet, Paginator]:
+    def get_review_comments(cls, *, pk: int, page: int = 0,
+                            paginate_by: int = 12) -> Tuple[
+        QuerySet, Paginator]:
         """
         Return Review Comments and Pagination object.
         Used in Book Reviews view.
@@ -130,5 +139,7 @@ class Comment(models.Model):
         :param paginate_by: int = 12
         :return: Tuple[QuerySet, Paginator]
         """
-        pag = Paginator(cls.objects.prefetch_related('writer').select_related('writer__userprofileinfo').filter(approved=True, review__pk=pk), paginate_by)
+        pag = Paginator(cls.objects.prefetch_related('writer').select_related(
+            'writer__userprofileinfo').filter(approved=True, review__pk=pk),
+                        paginate_by)
         return pag.page(page).object_list, pag

@@ -1,7 +1,5 @@
 from django.shortcuts import render
 
-# Create your views here.
-
 
 def handler403(request, *args, **kwargs):
     """

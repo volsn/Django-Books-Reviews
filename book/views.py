@@ -1,14 +1,14 @@
 """
 Views for Book App
 """
+from django.db.models import QuerySet
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.db.models import QuerySet
 from django.views.generic import (ListView, DetailView,
                                   DeleteView, UpdateView)
 
-from book.models import Book
 from book.forms import BookForm
+from book.models import Book
 from comment.models import Review
 from utils.user_utils import (ModeratorRequiredMixin,
                               current_user_is_moderator)
@@ -79,10 +79,12 @@ class BookDetailView(DetailView):
         """
         context = super().get_context_data(**kwargs)
         page = self.request.GET.get('page') or 1
-        context['reviews'], context['page_obj'] = Review.get_book_reviews(pk=self.object.pk,
-                                                                          page=page,
-                                                                          paginate_by=self.paginate_by)
-        context['current_user_is_moderator'] = current_user_is_moderator(self.request)
+        context['reviews'], context['page_obj'] = Review.get_book_reviews(
+            pk=self.object.pk,
+            page=page,
+            paginate_by=self.paginate_by)
+        context['current_user_is_moderator'] = current_user_is_moderator(
+            self.request)
         return context
 
 
@@ -106,4 +108,5 @@ class BookUpdateView(ModeratorRequiredMixin, UpdateView):
         """
         Return User to Book Details Page
         """
-        return reverse_lazy('book:book-details', kwargs={'pk': self.kwargs.get('pk')})
+        return reverse_lazy('book:book-details',
+                            kwargs={'pk': self.kwargs.get('pk')})

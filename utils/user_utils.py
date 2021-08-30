@@ -8,16 +8,14 @@ def current_user_is_moderator(request):
 
 class ModeratorRequiredMixin:
     def dispatch(self, request, *args, **kwargs):
-        if request.user.is_superuser \
-                or request.user.groups.filter(name='moderator').exists():
+        if current_user_is_moderator(request):
             return super().dispatch(request, *args, **kwargs)
         return HttpResponseForbidden('Moderator Rights required')
 
 
 class OwnerOrModeratorRequiredMixin:
     def dispatch(self, request, *args, **kwargs):
-        if (request.user.groups.filter(name='moderator').exists()
-                or request.user.is_superuser
+        if (current_user_is_moderator(request)
                 or self.object.owner.pk == request.user.pk):
             return super().dispatch(request, *args, **kwargs)
         return HttpResponseForbidden('Moderator or Owner Rights required')

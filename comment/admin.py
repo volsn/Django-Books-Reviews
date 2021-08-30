@@ -2,9 +2,8 @@
 Registering Models for Django Admin Panel
 """
 from django.contrib import admin
-from comment.models import Review, Comment
 
-# Register your models here.
+from comment.models import Review, Comment
 
 
 class ReviewAdmin(admin.ModelAdmin):
