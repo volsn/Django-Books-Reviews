@@ -6,7 +6,7 @@ import pandas as pd
 from faker import Faker
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE',
-                      'softserve_demo1_books.settings')
+                      'django_books.settings')
 
 import django
 
