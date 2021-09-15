@@ -2,6 +2,7 @@ from typing import Union
 
 from django.contrib.auth.backends import BaseBackend
 from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.http import HttpRequest
 
 
@@ -10,7 +11,7 @@ class MyCustomAuthBackend(BaseBackend):
     Custom Authentication Backend
     """
 
-    def authenticate(self, request: HttpRequest, username: str = None,
+    def authenticate(self, request: HttpRequest, email: str = None,
                      password: str = None) -> Union[User, None]:
         """
         Overriding authenticate method.
@@ -18,15 +19,15 @@ class MyCustomAuthBackend(BaseBackend):
         otherwise, return None.
 
         :param request: HttpRequest
-        :param username: str = None
+        :param email: str = None
         :param password: str = None
         :return: Union[User, None]
         """
         try:
-            user = User.objects.get(username=username)
+            user = get_user_model().objects.get(email=email)
             if user.check_password(password):
                 return user
-        except User.DoesNotExist:
+        except get_user_model().DoesNotExist:
             pass
 
         return None
@@ -40,6 +41,6 @@ class MyCustomAuthBackend(BaseBackend):
         :return: Union[User, None]
         """
         try:
-            return User.objects.get(pk=user_id)
-        except User.DoesNotExist:
+            return get_user_model().objects.get(pk=user_id)
+        except get_user_model().DoesNotExist:
             return None

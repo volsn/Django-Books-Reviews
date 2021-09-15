@@ -3,8 +3,8 @@
     <form action="{% url 'user:user_login' %}" method="POST">
         {% csrf_token %}
         <div class="mb-3">
-            <label for="inputUsername" class="form-label">Username</label>
-            <input type="text" name="username" class="form-control" id="inputUsername" />
+            <label for="inputEmail" class="form-label">Email</label>
+            <input type="text" name="email" class="form-control" id="inputEmail" />
         </div>
         <div class="mb-3">
             <label for="inputPassword" class="form-label">Password</label>

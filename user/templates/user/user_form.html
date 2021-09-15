@@ -6,10 +6,6 @@
     <form action="{% url 'user:user_register' %}" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="mb-3">
-            <label for="inputUsername" class="form-label">Username</label>
-            <input type="text" name="username" class="form-control" id="inputUsername" />
-        </div>
-        <div class="mb-3">
             <label for="inputEmail" class="form-label">Email</label>
             <input type="email" name="email" class="form-control" id="inputEmail" />
         </div>
@@ -17,9 +13,14 @@
             <label for="inputPassword" class="form-label">Password</label>
             <input type="password" name="password" class="form-control" id="inputPassword" />
         </div>
-
-        {{ profile_form.as_p }}
-        <button type="submit" class="btn btn-primary">Register</button>
+        <div class="mb-3">
+            <label for="uploadProfilePic" class="form-label">Profile Pic</label>
+            <input type="file" name="profile_pic" class="form-control" id="uploadProfilePic" />
+        </div>
+        <div class="mb-3">
+            <br/>
+            <button type="submit" class="btn btn-primary">Register</button>
+        </div>
     </form>
     {% endif %}
 </div>
