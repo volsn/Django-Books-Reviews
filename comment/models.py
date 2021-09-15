@@ -1,12 +1,10 @@
 from typing import Tuple
 
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.db import models
 from django.db.models import QuerySet
-
-
-# Create your models here.
 
 
 class Review(models.Model):
@@ -16,7 +14,7 @@ class Review(models.Model):
 
     RATING_CHOICES = zip(range(1, 6), range(1, 6))
 
-    reviewer = models.ForeignKey(User, on_delete=models.CASCADE)
+    reviewer = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     book = models.ForeignKey('book.Book', on_delete=models.CASCADE)
 
     title = models.CharField(max_length=128)
@@ -88,7 +86,7 @@ class Comment(models.Model):
     Comment Model
     """
 
-    writer = models.ForeignKey(User, on_delete=models.CASCADE)
+    writer = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     review = models.ForeignKey('comment.Review', on_delete=models.CASCADE)
     replied_to = models.ForeignKey('comment.Comment', on_delete=models.CASCADE,
                                    null=True, blank=True, default=None)
@@ -129,8 +127,8 @@ class Comment(models.Model):
 
     @classmethod
     def get_review_comments(cls, *, pk: int, page: int = 0,
-                            paginate_by: int = 12) -> Tuple[
-        QuerySet, Paginator]:
+                            paginate_by: int = 12) \
+            -> Tuple[QuerySet, Paginator]:
         """
         Return Review Comments and Pagination object.
         Used in Book Reviews view.
@@ -139,7 +137,6 @@ class Comment(models.Model):
         :param paginate_by: int = 12
         :return: Tuple[QuerySet, Paginator]
         """
-        pag = Paginator(cls.objects.prefetch_related('writer').select_related(
-            'writer__userprofileinfo').filter(approved=True, review__pk=pk),
-                        paginate_by)
+        pag = Paginator(cls.objects.prefetch_related('writer')
+                        .filter(approved=True, review__pk=pk), paginate_by)
         return pag.page(page).object_list, pag

@@ -54,7 +54,7 @@ def load_books(path=os.path.join('data', 'books_cleaned.csv')):
 
 def generate_users(num=100):
     for _ in range(num):
-        user = User(username=fake.profile()['username'],
+        user = User(email=fake.profile()['mail'],
                     password=make_password(fake.password()))
         user.save()
 

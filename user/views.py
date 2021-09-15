@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render
 from django.urls import reverse
 
-from user.forms import UserForm, UserProfileInfoForm
+# from user.forms import UserForm
 
 
 def user_login(request):
@@ -36,33 +36,26 @@ def user_register(request):
 
     if request.method == "POST":
         user_form = UserForm(data=request.POST)
-        profile_form = UserProfileInfoForm(data=request.POST)
 
-        if user_form.is_valid() and profile_form.is_valid():
+        if user_form.is_valid():
 
             user = user_form.save()
             user.set_password(user.password)
-            user.save()
-
-            profile = profile_form.save(commit=False)
-            profile.user = user
 
             if 'profile_pic' in request.FILES:
-                profile.profile_pic = request.FILES['profile_pic']
+                user.profile_pic = request.FILES['profile_pic']
 
-            profile.save()
+            user.save()
 
             registered = True
 
     else:
 
         user_form = UserForm()
-        profile_form = UserProfileInfoForm()
 
     return render(request, 'user/user_form.html',
                   context={
                       'user_form': user_form,
-                      'profile_form': profile_form,
                       'registered': registered
                   })
 

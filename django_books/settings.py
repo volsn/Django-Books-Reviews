@@ -42,6 +42,7 @@ INTERNAL_IPS = [
 # Application definition
 
 AUTHENTICATION_BACKENDS = ['user.authentication.MyCustomAuthBackend']
+AUTH_USER_MODEL = 'user.User'
 
 LOGIN_REDIRECT_URL = '/user/user_login'
 
