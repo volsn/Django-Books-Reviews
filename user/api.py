@@ -10,7 +10,7 @@ from rest_framework.response import Response
 class GetToken(views.APIView):
     def post(self, request):
 
-        user = User.objects.filter(username=request.data['username']).first()
+        user = User.objects.filter(email=request.data['username']).first()
         if user is None or not user.check_password(request.data['password']):
             return Response({'message': 'Login failed.'}, status=400)
 
